@@ -4,6 +4,7 @@ import string
 
 def main():
     print("BASKETBALL TEAM STATS TOOL")
+    balance_teams()
     main_menu()
 
 
@@ -36,7 +37,6 @@ def team_selection_menu():
         menu_options = {}
         selected_team = {}
         options = [str(x) for x in list(range(1, 101))]
-        rosters = balance_teams()
         print("")
         print("Select a team to view:")
         print("")
@@ -66,17 +66,18 @@ def team_selection_menu():
 
 
 def balance_teams():
-    players_per_team = 0
-    rosters = {}
     teams = load_teams_data()
     players = load_players_data()
     players_per_team = (len(players) // len(teams))
+    experienced_players = [d for d in players if d['experience']]
+    inexperienced_players = [d for d in players if not d['experience']]
+
     for team in teams:
         temp_players = []
         while len(temp_players) < players_per_team:
-            temp_players.append(players.pop())
+            temp_players.append(experienced_players.pop())
+            temp_players.append(inexperienced_players.pop())
         rosters[team] = temp_players
-
     return rosters
 
 
@@ -131,4 +132,6 @@ def clean_players(data):
     return cleaned
 
 
-main()
+if __name__ == "__main__":
+    rosters = {}
+    main()
